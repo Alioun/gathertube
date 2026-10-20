@@ -58,7 +58,7 @@ class GatherTubeOptions {
         
         this.elements.rateExtension.addEventListener('click', (e) => {
             e.preventDefault();
-            this.openLink('https://chrome.google.com/webstore/detail/gathertube');
+            this.openLink('https://chromewebstore.google.com/detail/gathertube/fmllpbgakbdnamlmdgjhphglebmnoend');
         });
         
         this.elements.viewSource.addEventListener('click', (e) => {

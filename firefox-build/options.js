@@ -113,8 +113,16 @@ class GatherTubeOptions {
             const manifest = browserAPI.runtime.getManifest();
             this.elements.version.textContent = manifest.version;
 
-            // Load queue info
-            const result = await browserAPI.storage.local.get(['currentQueue', 'queueTimestamp']);
+            // Load queue info. Queues are stored per window (currentQueue_<windowId>),
+            // so show the most recently updated one
+            const stored = await browserAPI.storage.local.get(null);
+            const result = {};
+            Object.keys(stored).forEach(key => {
+                if (key.startsWith('queueTimestamp_') && (!result.queueTimestamp || stored[key] > result.queueTimestamp)) {
+                    result.queueTimestamp = stored[key];
+                    result.currentQueue = stored['currentQueue_' + key.slice('queueTimestamp_'.length)];
+                }
+            });
 
             if (result.currentQueue && Array.isArray(result.currentQueue)) {
                 this.elements.queueSize.textContent = result.currentQueue.length;

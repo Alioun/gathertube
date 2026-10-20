@@ -658,6 +658,7 @@ class GatherTubePlayer {
                 if (e.shiftKey && !e.ctrlKey && !e.metaKey && !e.altKey) {
                     e.preventDefault();
                     e.stopPropagation();
+                    this.showShortcutFeedback('Next Video (Shift + →)');
                     this.playNext();
                 }
                 break;
@@ -666,6 +667,7 @@ class GatherTubePlayer {
                 if (e.shiftKey && !e.ctrlKey && !e.metaKey && !e.altKey) {
                     e.preventDefault();
                     e.stopPropagation();
+                    this.showShortcutFeedback('Previous Video (Shift + ←)');
                     this.playPrevious();
                 }
                 break;
@@ -675,6 +677,7 @@ class GatherTubePlayer {
                 if (!hasModifiers) {
                     e.preventDefault();
                     e.stopPropagation();
+                    this.showShortcutFeedback('Toggle Playlist (P)');
                     this.togglePlaylistPanel();
                 }
                 break;
@@ -683,6 +686,7 @@ class GatherTubePlayer {
                 if (this.isPlaylistPanelOpen && !hasModifiers) {
                     e.preventDefault();
                     e.stopPropagation();
+                    this.showShortcutFeedback('Close Playlist (Escape)');
                     this.togglePlaylistPanel();
                 }
                 break;
@@ -692,6 +696,7 @@ class GatherTubePlayer {
                 if (!hasModifiers) {
                     e.preventDefault();
                     e.stopPropagation();
+                    this.showShortcutFeedback('Next Video (N)');
                     this.playNext();
                 }
                 break;
@@ -701,6 +706,7 @@ class GatherTubePlayer {
                 if (!hasModifiers) {
                     e.preventDefault();
                     e.stopPropagation();
+                    this.showShortcutFeedback('Previous Video (B)');
                     this.playPrevious();
                 }
                 break;
@@ -724,6 +730,44 @@ class GatherTubePlayer {
 
     hideLoading() {
         this.elements.loadingOverlay.style.display = 'none';
+    }
+
+    showShortcutFeedback(message) {
+        // Create or update keyboard shortcut feedback
+        let feedbackDiv = document.getElementById('shortcut-feedback');
+        if (!feedbackDiv) {
+            feedbackDiv = document.createElement('div');
+            feedbackDiv.id = 'shortcut-feedback';
+            feedbackDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: rgba(255, 0, 0, 0.9);
+                color: white;
+                padding: 8px 16px;
+                border-radius: 4px;
+                font-size: 14px;
+                font-weight: 600;
+                z-index: 10000;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                pointer-events: none;
+            `;
+            document.body.appendChild(feedbackDiv);
+        }
+
+        feedbackDiv.textContent = message;
+        feedbackDiv.style.opacity = '1';
+
+        // Clear existing timeout
+        if (this.shortcutFeedbackTimeout) {
+            clearTimeout(this.shortcutFeedbackTimeout);
+        }
+
+        // Hide after 1 second
+        this.shortcutFeedbackTimeout = setTimeout(() => {
+            feedbackDiv.style.opacity = '0';
+        }, 1000);
     }
 
     showError(message) {

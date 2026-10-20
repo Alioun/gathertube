@@ -161,7 +161,7 @@ class GatherTubePlayer {
             // t: start time parameter
             // modestbranding=1: remove YouTube logo
             // fs=0: disable fullscreen to prevent endscreen
-            const iframeSrc = `https://www.youtube-nocookie.com/embed/${this.videoIds[0]}?autoplay=1&controls=1&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&enablejsapi=1&fs=0&disablekb=1&origin=${window.location.origin}`;
+            const iframeSrc = `https://www.youtube-nocookie.com/embed/${this.videoIds[this.currentVideoIndex]}?autoplay=1&controls=1&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&enablejsapi=1&fs=0&disablekb=1&origin=${window.location.origin}`;
 
             // Create and configure iframe
             const iframe = document.createElement('iframe');
@@ -778,11 +778,12 @@ class GatherTubePlayer {
     }
 
     retry() {
+        this.cleanup();
         this.hideError();
         this.parseVideoIds();
         if (this.videoIds.length > 0) {
             this.showLoading();
-            this.initPlayer();
+            this.initIframePlayer();
         }
     }
 }

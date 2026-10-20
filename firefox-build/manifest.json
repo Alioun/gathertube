@@ -15,6 +15,7 @@
   "permissions": [
     "tabs",
     "storage",
+    "declarativeNetRequestWithHostAccess",
     "*://*.youtube.com/*",
     "*://*.youtu.be/*"
   ],

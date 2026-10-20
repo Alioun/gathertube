@@ -81,7 +81,7 @@ Privacy-focused: All data stored locally, no external servers or tracking.
 
 ### 🔧 **Technical Details**
 
-- **Permissions**: `tabs`, `storage`, `*://*.youtube.com/*`, `*://*.youtu.be/*`
+- **Permissions**: `tabs`, `storage`, `declarativeNetRequestWithHostAccess`, `*://*.youtube.com/*`, `*://*.youtu.be/*`
 - **Background**: Non-persistent background script
 - **Content Security Policy**: Default secure policy
 - **Update URL**: Not required (AMO handles updates)
@@ -96,7 +96,7 @@ Privacy-focused: All data stored locally, no external servers or tracking.
 
 ### 🔐 **Security & Privacy**
 
-- **No External Requests**: Extension works entirely offline
+- **No External Requests**: Extension makes no requests except to YouTube
 - **Local Storage Only**: All settings and queues stored in Firefox's local storage
 - **No Tracking**: No analytics, telemetry, or user tracking
 - **No Personal Data**: Extension doesn't collect personal information

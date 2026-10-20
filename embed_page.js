@@ -636,6 +636,13 @@ class GatherTubePlayer {
     openQueueInYouTube() {
         if (this.videoIds.length === 0) return;
 
+        // YouTube's own queue (watch_videos) keeps only the first 50 videos, so don't
+        // open a cut-down copy of a longer queue
+        if (this.videoIds.length > 50) {
+            alert(`YouTube's own queue holds only 50 videos, so it can't open this queue of ${this.videoIds.length}. Your queue stays here in the GatherTube player.`);
+            return;
+        }
+
         const videoIdsParam = this.videoIds.join(',');
         const watchVideosUrl = `https://www.youtube.com/watch_videos?video_ids=${encodeURIComponent(videoIdsParam)}`;
 

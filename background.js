@@ -41,6 +41,12 @@ class GatherTubeBackground {
             // Get all YouTube video tabs
             const videoData = await this.getYouTubeVideoTabs(windowId);
             
+            // YouTube now shows many titles auto-translated into the viewer's language,
+            // and tab titles follow, so the language sorts use each video's original title
+            if (sortOrder === 'english' || sortOrder === 'non-english') {
+                await this.loadOriginalTitles(videoData);
+            }
+
             // Sort video data according to the selected sort order
             const sortedVideoData = this.sortVideoData(videoData, sortOrder || 'newest');
             
@@ -151,6 +157,40 @@ class GatherTubeBackground {
         return youtubeTabs;
     }
     
+    async loadOriginalTitles(videoData) {
+        // Ask YouTube's oEmbed endpoint for each video's original title, once per video
+        // and 4 requests at a time; keep the tab title when that fails
+        const videoIds = [...new Set(videoData.map(video => this.extractVideoId(video.url)).filter(id => id))];
+        const titles = {};
+
+        const lookUpTitles = async () => {
+            while (videoIds.length > 0) {
+                const videoId = videoIds.shift();
+                try {
+                    const response = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`, {
+                        signal: AbortSignal.timeout(3000)
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        titles[videoId] = data.title;
+                    }
+                } catch (error) {
+                    // YouTube is unreachable or too slow, so keep the tab titles and stop
+                    // looking up the rest rather than waiting 3 seconds for each of them
+                    videoIds.length = 0;
+                }
+            }
+        };
+        await Promise.all(Array.from({ length: 4 }, () => lookUpTitles()));
+
+        videoData.forEach(video => {
+            const title = titles[this.extractVideoId(video.url)];
+            if (title) {
+                video.title = title;
+            }
+        });
+    }
+
     extractUniqueVideoIds(videoData) {
         const videoIds = new Set();
         

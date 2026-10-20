@@ -593,8 +593,9 @@ class GatherTubePlayer {
         // Remove from old position
         this.videoIds.splice(dragIndex, 1);
 
-        // Adjust drop index if necessary
-        const newDropIndex = dragIndex < dropIndex ? dropIndex - 1 : dropIndex;
+        // Take the target's place, so dragging down puts the item below the target
+        // and dragging onto the last item moves it to the end
+        const newDropIndex = dropIndex;
 
         // Insert at new position
         this.videoIds.splice(newDropIndex, 0, videoId);

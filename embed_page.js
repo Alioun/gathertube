@@ -121,6 +121,10 @@ class GatherTubePlayer {
     }
 
     async saveQueue() {
+        // Keep the page URL in step with the queue, so reloading the page or restoring
+        // the browser session brings back the edited queue instead of the original one
+        history.replaceState(null, '', `?ids=${encodeURIComponent(this.videoIds.join(','))}&windowId=${this.windowId}`);
+
         try {
             // Use window-specific storage key for per-window isolation
             const storageKey = this.windowId ? `currentQueue_${this.windowId}` : 'currentQueue';

@@ -105,6 +105,7 @@ class GatherTubeBackground {
                 urlToCheck.includes('/channel/') || 
                 urlToCheck.includes('/c/') || 
                 urlToCheck.includes('/user/') ||
+                urlToCheck.includes('/@') ||
                 urlToCheck.includes('youtube.com/feed') ||
                 urlToCheck.includes('youtube.com/results')) {
                 return false;

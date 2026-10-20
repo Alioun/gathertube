@@ -465,6 +465,12 @@ class GatherTubePlayer {
             this.removeFromQueue(index);
         });
 
+        // Drag and drop events
+        item.addEventListener('dragstart', (e) => this.handleDragStart(e, index));
+        item.addEventListener('dragover', (e) => this.handleDragOver(e));
+        item.addEventListener('drop', (e) => this.handleDrop(e, index));
+        item.addEventListener('dragend', () => this.handleDragEnd());
+
         // Load video title asynchronously
         this.loadVideoInfo(videoId, item.querySelector('.item-title'), item.querySelector('.item-duration'));
 
@@ -558,6 +564,65 @@ class GatherTubePlayer {
         this.renderPlaylist();
         this.updateUI();
         this.saveQueue();
+    }
+
+    handleDragStart(e, index) {
+        this.draggedItem = { index, element: e.target };
+        e.target.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+    }
+
+    handleDragOver(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+
+        const target = e.target.closest('.playlist-item');
+        if (target && target !== this.draggedItem?.element) {
+            target.classList.add('drag-over');
+        }
+    }
+
+    handleDrop(e, dropIndex) {
+        e.preventDefault();
+
+        if (!this.draggedItem || this.draggedItem.index === dropIndex) return;
+
+        const dragIndex = this.draggedItem.index;
+        const videoId = this.videoIds[dragIndex];
+
+        // Remove from old position
+        this.videoIds.splice(dragIndex, 1);
+
+        // Adjust drop index if necessary
+        const newDropIndex = dragIndex < dropIndex ? dropIndex - 1 : dropIndex;
+
+        // Insert at new position
+        this.videoIds.splice(newDropIndex, 0, videoId);
+
+        // Update current index
+        if (dragIndex === this.currentVideoIndex) {
+            this.currentVideoIndex = newDropIndex;
+        } else if (dragIndex < this.currentVideoIndex && newDropIndex >= this.currentVideoIndex) {
+            this.currentVideoIndex--;
+        } else if (dragIndex > this.currentVideoIndex && newDropIndex <= this.currentVideoIndex) {
+            this.currentVideoIndex++;
+        }
+
+        this.renderPlaylist();
+        this.updateUI();
+        this.saveQueue();
+    }
+
+    handleDragEnd() {
+        if (this.draggedItem) {
+            this.draggedItem.element.classList.remove('dragging');
+        }
+
+        document.querySelectorAll('.playlist-item.drag-over').forEach(item => {
+            item.classList.remove('drag-over');
+        });
+
+        this.draggedItem = null;
     }
 
     openQueueInYouTube() {

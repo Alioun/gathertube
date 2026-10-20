@@ -85,7 +85,7 @@ Privacy-focused: All data stored locally, no external servers or tracking.
 - **Background**: Non-persistent background script
 - **Content Security Policy**: Default secure policy
 - **Update URL**: Not required (AMO handles updates)
-- **Minimum Firefox Version**: 57.0 (WebExtensions support)
+- **Minimum Firefox Version**: 128.0 (the embedded player's Referer rule needs `declarativeNetRequest`, from 113.0, and `data_collection_permissions` needs 128.0)
 
 ### 📄 **Required Files for Submission**
 
@@ -107,7 +107,7 @@ Privacy-focused: All data stored locally, no external servers or tracking.
 - ✅ **Functional Testing**: All features working correctly
 - ✅ **Performance Testing**: Lightweight and responsive
 - ✅ **Security Testing**: No security vulnerabilities detected
-- ✅ **Compatibility Testing**: Works across Firefox versions 57+
+- ✅ **Compatibility Testing**: Works across Firefox versions 128+
 - ✅ **Cross-Platform**: Tested on Linux, Windows, macOS
 
 ## 🚀 **Submission Process**

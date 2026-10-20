@@ -149,7 +149,7 @@ All keyboard shortcuts show visual confirmation when activated, displaying the a
 
 ### Supported Browsers
 - ✅ **Google Chrome** (Manifest V3, Service Worker)
-- ✅ **Mozilla Firefox** (Manifest V2, Background Script)
+- ✅ **Mozilla Firefox** 128 or later (Manifest V2, Background Script)
 - ✅ **Microsoft Edge** (Chromium-based, same as Chrome)
 - ✅ **Brave Browser** (Chromium-based, same as Chrome)
 - ✅ **Opera** (Chromium-based, same as Chrome)
